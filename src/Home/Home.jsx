@@ -1,42 +1,72 @@
-import './index.css';
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getPhotos} from '../store/store'
+import { BrowserRouter, Switch, Link, Route } from "react-router-dom";
 
-const Home = ({photos, get}) =>{
+import style from './Home.module.css';
 
-useEffect(()=>{
-  getData();
-})
+import Single from '../Single/Single';
+import {getPhotos, increaseStart, setPhoto, cleanPhotos} from './duckHome'
 
-const getData = () =>{
-  fetch('https://jsonplaceholder.typicode.com/photos?_offset=0&_limit=6')
-  .then(response => response.json())
-  .then((data) => get(data));
-} 
+const Home = ({photos, getPhotos, limit, start, addMore, choosePhoto, clean}) =>{
+  useEffect(()=>{
+    getPhotos(limit, start);
+  },[start])
 
-console.log(photos);
+  const handlerAdd = () => addMore(start);
+  
+  const handlerSingle = (e) => choosePhoto(photos[e.target.id-1]);
 
-  if(photos){
+  const handlerClean = () => clean();
+  
+  if(photos.length){
     return <div>
-      {photos.map(({id, title, thumbnailUrl}) =>
-        <img key ={id} alt ={title} src ={thumbnailUrl} ></img>
-      )}
+      <BrowserRouter>
+        <Switch>
+          <Route path ="/single">
+              <Single />
+          </Route>
+          <Route path = "/">
+            <h1>All Photos</h1>
+            <div className ={style.photos}>
+              {photos.map(({id, title, thumbnailUrl}) =>
+                <span onClick ={handlerClean} key ={id} > <Link to ="/single"><img id ={id} onClick ={handlerSingle} alt ={title} src ={thumbnailUrl} /></Link></span>
+              )}
+            </div>
+            <div className ={style.load_wrap}><span className ={style.load} onClick ={handlerAdd}>Load more...</span></div>
+          </Route>
+      </Switch>
+    </BrowserRouter>
     </div>
   } else{
     return <div>Loading...</div>
   }
 }
 
+const propTypes = {
+  photos: PropTypes.array, 
+  getPhotos: PropTypes.func, 
+  limit: PropTypes.number,
+  step: PropTypes.number,
+  addMore: PropTypes.func,
+  choosePhoto: PropTypes.func
+}
+
+Home.propTypes = propTypes;
+
 const mapStateToProps = (state) => ({
-  photos: state.photos
+  photos: state.home.photos,
+  limit: state.home.limit,
+  start: state.home.start
 });
 
 const mapDispatchToProps = (dispatch) =>({
-  get: (data) => dispatch(getPhotos(data))
+  getPhotos: (limit, start) => fetch(`https://jsonplaceholder.typicode.com/photos?_start=${start}&_limit=${limit}`)
+  .then(response => response.json())
+  .then((data) => dispatch(getPhotos(data))),
+  addMore: (start) => dispatch(increaseStart(start)),
+  choosePhoto: (photo) => dispatch(setPhoto(photo)),
+  clean: () => dispatch(cleanPhotos())
 })
 
-
 export default connect(mapStateToProps,mapDispatchToProps)(Home);
-
-

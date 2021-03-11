@@ -1,0 +1,13 @@
+.photos{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img{
+    margin: 30px 60px;
+}
+
+.info{
+    text-align: center;
+    font-size: 20px;
+}

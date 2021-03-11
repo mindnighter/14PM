@@ -1,0 +1,27 @@
+.photos{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+img{
+    margin: 30px 60px;
+}
+
+h1{
+    text-align: center;
+    margin: 50px 0;
+}
+
+.load_wrap{
+    text-align: end;
+    margin-right: 2%;
+}
+
+.load{
+    cursor: pointer;
+    margin-left: 70px;
+    color: #4752f0;
+    font-size: 22px;
+    user-select: none; 
+}

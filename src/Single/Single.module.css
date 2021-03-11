@@ -1,0 +1,14 @@
+.wrap{
+    display: flex;
+    justify-content: space-between;
+}
+
+p{
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+a{
+    text-decoration: none;
+    color: #4752f0;
+}

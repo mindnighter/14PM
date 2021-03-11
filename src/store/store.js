@@ -1,4 +1,7 @@
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {homeReducer} from '../Home/duckHome';
+import {singleReducer} from '../Single/duckSingle';
+import {albumReducer} from '../Album/duckAlbum';
 /*applyMiddleware(asyncActionsMiddleware)*/
 const asyncActionsMiddleware = ({dispatch}) => (next) => (action) =>{
     if (typeof action === 'function'){
@@ -8,22 +11,12 @@ const asyncActionsMiddleware = ({dispatch}) => (next) => (action) =>{
     return next(action);
 }
 
-const playloadedState = [{}];
-
-export const getPhotos = (photos) =>({
-    type: 'get_photos',
-    playload: photos
+const reducer = combineReducers({
+    home: homeReducer, 
+    single: singleReducer,
+    album: albumReducer
 })
 
-const reducer = (state, action) => {
-    switch(action.type){
-        case 'get_photos': return [...state, {
-            photos: [ ...action.playload]
-        }];
-        default: return state;
-    }
-}
-
-const store = createStore(reducer, playloadedState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(reducer, {},  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;
