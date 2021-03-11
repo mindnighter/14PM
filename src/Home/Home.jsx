@@ -15,9 +15,11 @@ const Home = ({photos, getPhotos, limit, start, addMore, choosePhoto, clean}) =>
 
   const handlerAdd = () => addMore(start);
   
-  const handlerSingle = (e) => choosePhoto(photos[e.target.id-1]);
-
-  const handlerClean = () => clean();
+  const handlerSingle = (e) => {
+    choosePhoto(photos[e.target.id-1]);
+    clean();
+    if(!start){getPhotos(limit, 0)}
+  }
   
   if(photos.length){
     return <div>
@@ -30,7 +32,7 @@ const Home = ({photos, getPhotos, limit, start, addMore, choosePhoto, clean}) =>
             <h1>All Photos</h1>
             <div className ={style.photos}>
               {photos.map(({id, title, thumbnailUrl}) =>
-                <span onClick ={handlerClean} key ={id} > <Link to ="/single"><img id ={id} onClick ={handlerSingle} alt ={title} src ={thumbnailUrl} /></Link></span>
+                <span onClick ={handlerSingle} key ={id} > <Link to ="/single"><img id ={id} alt ={title} src ={thumbnailUrl} /></Link></span>
               )}
             </div>
             <div className ={style.load_wrap}><span className ={style.load} onClick ={handlerAdd}>Load more...</span></div>

@@ -26,7 +26,6 @@ const playloadedState = {
 };
 
 export const homeReducer = (state = playloadedState, action) => {
-
     switch(action.type){
         case 'get_photos': return {...state, photos:
             state.photos.concat(action.playload)

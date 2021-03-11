@@ -4,14 +4,14 @@ import {useEffect} from 'react';
 import { BrowserRouter, Switch, Link, Route } from "react-router-dom";
 
 import style from './Single.module.css';
-import {getAlbum} from './duckSingle';
-import Album from '../Album/Album';
+import {getAlbum} from './duckSingle'
+import Album from '../Album/Album'
 
-const Single = ({photo, album, getAlbum}) =>{
+const Single = ({photo,album,getAlbum}) =>{
     useEffect(()=>{
         getAlbum(photo.albumId);
       },[photo])
-
+      
         const {title, url} = photo;
         return(
             <BrowserRouter>
@@ -31,7 +31,6 @@ const Single = ({photo, album, getAlbum}) =>{
                 </Switch>
             </BrowserRouter>
         )
-    
 }
 
 const propTypes = {
@@ -49,7 +48,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>({
     getAlbum: (id) => fetch(`https://jsonplaceholder.typicode.com/albums/${id}?_expand=user`)
     .then(response => response.json())
-    .then((data) => dispatch(getAlbum(data)))
+    .then((data) => dispatch(getAlbum(data))),
 })
   
 export default connect(mapStateToProps, mapDispatchToProps)(Single);
